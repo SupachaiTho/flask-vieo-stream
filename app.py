@@ -1,37 +1,80 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, send_from_directory, Response
+from camera import Camera
+from pathlib import Path
+from capture import capture_and_save
 import cv2
+import argparse, logging, logging.config, conf
+
+logging.config.dictConfig(conf.dictConfig)
+logger = logging.getLogger(__name__)
+
+camera = Camera()
+camera.run()
 
 app = Flask(__name__)
 
-camera = cv2.VideoCapture(0) # local webcam
-# camera = cv2.VideoCapture('rtsp://freja.hiof.no:1935/rtplive/_definst_/hessdalen03.stream')  # use 0 for web camera
-#  for cctv camera use rtsp://username:password@ip_address:554/user=username_password='password'_channel=channel_number_stream=0.sdp' instead of camera
-# for local webcam use cv2.VideoCapture(0)
+@app.after_request
+def add_header(r):
+	"""
+	Add headers to both force latest IE rendering or Chrome Frame,
+	and also to cache the rendered page for 10 minutes
+	"""
+	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+	r.headers["Pragma"] = "no-cache"
+	r.headers["Expires"] = "0"
+	r.headers["Cache-Control"] = "public, max-age=0"
+	return r
 
-def gen_frames():  # generate frame by frame from camera
-    while True:
-        # Capture frame-by-frame
-        success, frame = camera.read()  # read the camera frame
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+@app.route("/")
+def entrypoint():
+	logger.debug("Requested /")
+	return render_template("index.html")
+
+@app.route("/r")
+def capture():
+	logger.debug("Requested capture")
+	im = camera.get_frame(_bytes=False)
+	try:
+		capture_and_save(im)
+	except:
+		print("An exception occurred")
+	return render_template("send_to_init.html")
+
+@app.route("/images/last")
+def last_image():
+	logger.debug("Requested last image")
+	p = Path("images/last.png")
+	if p.exists():
+		r = "last.png"
+	else:
+		logger.debug("No last image")
+		r = "not_found.jpeg"
+	return send_from_directory("images",r)
 
 
-@app.route('/video_feed')
+def gen(camera):
+	logger.debug("Starting stream")
+	while True:
+		frame = camera.get_frame()
+		yield (b'--frame\r\n'
+			   b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n')
+
+@app.route("/stream")
+def stream_page():
+	logger.debug("Requested stream page")
+	return render_template("stream.html")
+
+@app.route("/video_feed")
 def video_feed():
-    #Video streaming route. Put this in the src attribute of an img tag
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+	return Response(gen(camera),
+		mimetype="multipart/x-mixed-replace; boundary=frame")
 
-
-@app.route('/')
-def index():
-    """Video streaming home page."""
-    return render_template('index.html')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__=="__main__":
+	# socketio.run(app,host="0.0.0.0",port="3005",threaded=True)
+	parser = argparse.ArgumentParser()
+	print(parser);
+	parser.add_argument('-p','--port',type=int,default=5000, help="Running port")
+	parser.add_argument("-H","--host",type=str,default='localhost', help="Address to broadcast")
+	args = parser.parse_args()
+	logger.debug("Starting server")
+	app.run(debug=True)
