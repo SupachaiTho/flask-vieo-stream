@@ -13,7 +13,7 @@ $(document).ready(function(){
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-   logSend.append('<p>'+rndValue + '-send   '+ localMediaStream+'</p>');
+   logSend.append('<p>'+rndValue+'</p>');
     if (!localMediaStream) {
     console.log('no localMediaStream');
       return;
