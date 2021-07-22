@@ -4,13 +4,16 @@ import logging
 from flask import Flask, render_template, Response
 from flask_socketio import SocketIO, emit
 from camera import Camera
-from utils import base64_to_pil_image, pil_image_to_base64
+from utils_local import base64_to_pil_image, pil_image_to_base64
 import cv2
+from PIL import Image
 import imageio
 import numpy as np
 import base64
 import io
 import matplotlib.pyplot as plt
+## Yolo
+import torch
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(stdout))
@@ -27,15 +30,19 @@ def test_message(input):
     image_data = input # Do your magical Image processing here!!
     #image_data = image_data.decode("utf-8")
 
-    img = imageio.imread(io.BytesIO(base64.b64decode(image_data)))
-    cv2_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    cv2.imwrite("reconstructed.jpg", cv2_img)
-    retval, buffer = cv2.imencode('.jpg', cv2_img)
-    b = base64.b64encode(buffer)
-    b = b.decode()
+    ## Yolo
+    img = Image.open(io.BytesIO(base64.b64decode(image_data)))
+    results = model(img, size=640)
+
+    results.render()  # updates results.imgs with boxes and labels
+    for img in results.imgs:
+        buffered = io.BytesIO()
+        img_base64 = Image.fromarray(img)
+        img_base64.save(buffered, format="JPEG")
+    b = base64.b64encode(buffered.getvalue()).decode()
     image_data = "data:image/jpeg;base64," + b
 
-    print("OUTPUT " + image_data)
+    # print("OUTPUT " + image_data)
     emit('out-image-event', {'image_data': image_data}, namespace='/test')
     #camera.enqueue_input(base64_to_pil_image(input))
 
@@ -70,4 +77,8 @@ def video_feed():
 
 
 if __name__ == '__main__':
+    model = torch.hub.load(
+        'ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=False
+    ).autoshape()  # force_reload = recache latest code
+    model.eval()
     socketio.run(app)
