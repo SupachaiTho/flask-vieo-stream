@@ -1,4 +1,4 @@
-from PIL import Image
+from pil import Image
 from io import BytesIO
 import base64
 
