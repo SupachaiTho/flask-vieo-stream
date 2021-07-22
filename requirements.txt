@@ -26,8 +26,8 @@ Pillow
 imageio
 PyYAML
 scipy
-haste-pytorch-cpu
-torchvision
+https://download.pytorch.org/whl/cpu/torch-1.8.1%2Bcpu-cp39-cp39-linux_x86_64.whl
+https://download.pytorch.org/whl/cpu/torchvision-0.9.1-cp39-cp39-manylinux2014_aarch64.whl
 tqdm
 
 tensorboard
