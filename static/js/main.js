@@ -11,7 +11,7 @@ $(document).ready(function(){
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-   $('<p>Text</p>').appendTo('#logSend');
+      $('#logSend').text('Sending');
     if (!localMediaStream) {
       return;
     }
@@ -25,6 +25,7 @@ $(document).ready(function(){
 //    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
     var img = new Image();
     socket.on('out-image-event',function(data){
+        $('#logReceive').text('Receive');
         var rndValue;
         rndValue = Math.floor((Math.random() * 50));
 
