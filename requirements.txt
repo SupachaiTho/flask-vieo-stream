@@ -27,9 +27,8 @@ Pillow
 imageio
 PyYAML
 scipy
-torch==1.8.1+cpu
-torchvision==0.9.1+cpu
-torchaudio==0.8.1
+haste-pytorch-cpu
+torchvision
 tqdm
 
 tensorboard
