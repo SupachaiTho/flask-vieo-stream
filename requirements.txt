@@ -26,33 +26,10 @@ Pillow
 imageio
 PyYAML
 scipy
-torch==1.8.1
-torchvision>=0.8.1
+torch==1.8.1+cpu
+torchvision==0.9.1+cpu
+torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 tqdm
-click==6.7
-enum-compat==0.0.2
-enum34==1.1.6
-eventlet==0.30.2
-Flask==0.12.2
-Flask-SocketIO==2.9.1
-gevent
-gevent-websocket==0.10.1
-greenlet
-gunicorn==20.1.0
-itsdangerous==0.24
-Jinja2==2.9.6
-MarkupSafe
-numpy
-olefile==0.44
-opencv-python-headless
-matplotlib
-Pillow
-imageio
-python-engineio==1.7.0
-python-socketio==1.7.7
-redis==2.10.5
-six==1.10.0
-Werkzeug==0.12.2
 
 tensorboard
 
