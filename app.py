@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 ## Yolo
 import torch
 
-print(__name__)
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(stdout))
 app.config['SECRET_KEY'] = 'secret!'
@@ -78,7 +77,11 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    print(__name__)
     model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).autoshape()
     model.eval()
     socketio.run(app)
+
+if __name__ == 'app':
+    print('build model at Heroku')
+    model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).autoshape()
+    model.eval()
