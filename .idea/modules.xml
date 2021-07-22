@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/flask_cam_stream.iml" filepath="$PROJECT_DIR$/.idea/flask_cam_stream.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/flask-vieo-stream.iml" filepath="$PROJECT_DIR$/.idea/flask-vieo-stream.iml" />
     </modules>
   </component>
 </project>
