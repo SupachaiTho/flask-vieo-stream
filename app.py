@@ -6,6 +6,7 @@ from flask_socketio import SocketIO, emit
 from camera import Camera
 from utils import base64_to_pil_image, pil_image_to_base64
 import cv2
+import imageio
 import numpy as np
 import base64
 import io
@@ -26,7 +27,7 @@ def test_message(input):
     image_data = input # Do your magical Image processing here!!
     #image_data = image_data.decode("utf-8")
 
-    img = cv2.imread(io.BytesIO(base64.b64decode(image_data)))
+    img = imageio.imread(io.BytesIO(base64.b64decode(image_data)))
     cv2_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     cv2.imwrite("reconstructed.jpg", cv2_img)
     retval, buffer = cv2.imencode('.jpg', cv2_img)
