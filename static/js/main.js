@@ -11,6 +11,9 @@ $(document).ready(function(){
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
   function sendSnapshot() {
+   var rndValue;
+    rndValue = Math.floor((Math.random() * 50));
+   logSend.append('<p>'+rndValue + '-send   '+ localMediaStream+'</p>');
     if (!localMediaStream) {
     console.log('no localMediaStream');
       return;
@@ -22,8 +25,6 @@ $(document).ready(function(){
     socket.emit('input image', dataURL);
 
     socket.emit('output image')
-    var rndValue;
-    rndValue = Math.floor((Math.random() * 50));
 //    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
  logSend.append(dataURL);
  alert(dataURL);
@@ -59,7 +60,6 @@ $(document).ready(function(){
     localMediaStream = stream;
 
     setInterval(function () {
-    alert('send');
       sendSnapshot();
     }, 50);
   }).catch(function(error) {
