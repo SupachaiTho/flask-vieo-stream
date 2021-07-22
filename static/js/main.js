@@ -28,10 +28,10 @@ $(document).ready(function(){
     socket.on('out-image-event',function(data){
         var rndValue2;
         rndValue2 = Math.floor((Math.random() * 50));
-        $('#logReceive').text('Receiving2 '+rndValue2+', '+data.image_data);
+        $('#logReceive').text('Receiving2 '+rndValue2);
         img.src = dataURL//data.image_data
 //        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
-        photo.setAttribute('src', data.image_data);
+        photo.src = data.image_data;
     });
   }
 
