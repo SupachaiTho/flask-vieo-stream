@@ -27,7 +27,7 @@ $(document).ready(function(){
         rndValue = Math.floor((Math.random() * 50));
 
         img.src = dataURL//data.image_data
-        log.text('<p>' + rndValue + '</p>'.'<p>' + data.image_data + '</p>');
+        log.html('<p>' + rndValue + '-v2 </p>'+'<p>' + data.image_data + '</p>');
         photo.setAttribute('src', data.image_data);
 
     });
