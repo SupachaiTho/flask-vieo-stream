@@ -7,11 +7,10 @@ $(document).ready(function(){
   var localMediaStream = null;
 
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
-
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-      $('#logSend').text('Sending');
+      $('#logSend').text('Sending  '+rndValue);
     if (!localMediaStream) {
       return;
     }
@@ -26,16 +25,13 @@ $(document).ready(function(){
     var img = new Image();
     socket.on('out-image-event',function(data){
         $('#logReceive').text('Receive');
-        var rndValue;
-        rndValue = Math.floor((Math.random() * 50));
+//        var rndValue;
+//        rndValue = Math.floor((Math.random() * 50));
 
         img.src = dataURL//data.image_data
 //        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
         photo.setAttribute('src', data.image_data);
-
     });
-
-
   }
 
   socket.on('connect', function() {
@@ -55,7 +51,7 @@ $(document).ready(function(){
 
     setInterval(function () {
       sendSnapshot();
-    }, 50);
+    }, 1000);
   }).catch(function(error) {
     console.log(error);
   });
