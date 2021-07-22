@@ -7,6 +7,8 @@ $(document).ready(function(){
   var localMediaStream = null;
 
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+   $('#logSend').text('Start Sending');
+   $('#logReceive').text('Start Receiving');
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
@@ -24,7 +26,7 @@ $(document).ready(function(){
 //    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
     var img = new Image();
     socket.on('out-image-event',function(data){
-        $('#logReceive').text('Receive');
+        $('#logReceive').text('Receiving');
 //        var rndValue;
 //        rndValue = Math.floor((Math.random() * 50));
 
