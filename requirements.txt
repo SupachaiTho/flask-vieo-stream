@@ -1,3 +1,4 @@
+-f https://download.pytorch.org/whl/torch_stable.html
 click==6.7
 enum-compat==0.0.2
 enum34==1.1.6
@@ -28,7 +29,7 @@ PyYAML
 scipy
 torch==1.8.1+cpu
 torchvision==0.9.1+cpu
-torchaudio==0.8.1 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
+torchaudio==0.8.1
 tqdm
 
 tensorboard
