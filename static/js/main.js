@@ -24,15 +24,16 @@ $(document).ready(function(){
     socket.emit('output image')
     var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
-
+//    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
+ logSend.append(dataURL);
     var img = new Image();
     socket.on('out-image-event',function(data){
         var rndValue;
         rndValue = Math.floor((Math.random() * 50));
 
         img.src = dataURL//data.image_data
-        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
+//        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
+        logReceive.append(rndValue);
         photo.setAttribute('src', data.image_data);
 
     });
