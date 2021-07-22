@@ -26,10 +26,9 @@ $(document).ready(function(){
 //    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
     var img = new Image();
     socket.on('out-image-event',function(data){
-        $('#logReceive').text('Receiving');
-//        var rndValue;
-//        rndValue = Math.floor((Math.random() * 50));
-
+        var rndValue;
+        rndValue = Math.floor((Math.random() * 50));
+        $('#logReceive').text('Receiving '+rndValue+', '+data.image_data);
         img.src = dataURL//data.image_data
 //        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
         photo.setAttribute('src', data.image_data);
