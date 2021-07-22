@@ -2,6 +2,7 @@ $(document).ready(function(){
   let namespace = "/test";
   let video = document.querySelector("#videoElement");
   let canvas = document.querySelector("#canvasElement");
+  let log = document.querySelector("#log");
   let ctx = canvas.getContext('2d');
   photo = document.getElementById('photo');
   var localMediaStream = null;
@@ -9,9 +10,6 @@ $(document).ready(function(){
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
   function sendSnapshot() {
-  var rndValue;
-  rndValue = Math.floor((Math.random() * 50));
-  $('<p>' + rndValue + '</p>').appendTo('#log');
     if (!localMediaStream) {
       return;
     }
@@ -25,10 +23,12 @@ $(document).ready(function(){
 
     var img = new Image();
     socket.on('out-image-event',function(data){
+        var rndValue;
+        rndValue = Math.floor((Math.random() * 50));
 
-
-    img.src = dataURL//data.image_data
-    photo.setAttribute('src', data.image_data);
+        img.src = dataURL//data.image_data
+        log.text('<p>' + rndValue + '</p>'.'<p>' + data.image_data + '</p>');
+        photo.setAttribute('src', data.image_data);
 
     });
 
