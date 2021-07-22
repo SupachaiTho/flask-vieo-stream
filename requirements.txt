@@ -19,8 +19,6 @@ six==1.10.0
 Werkzeug==0.12.2
 
 # Yolo
-https://download.pytorch.org/whl/cpu/torch-1.8.1%2Bcpu-cp39-cp39-linux_x86_64.whl
-https://download.pytorch.org/whl/cpu/torchvision-0.9.1%2Bcpu-cp39-cp39-linux_x86_64.whl
 matplotlib
 numpy
 opencv-python-headless
@@ -28,7 +26,8 @@ Pillow
 imageio
 PyYAML
 scipy
-# pip3 install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio===0.8.1 -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
+https://download.pytorch.org/whl/cpu/torch-1.8.1%2Bcpu-cp39-cp39-linux_x86_64.whl
+https://download.pytorch.org/whl/cpu/torchvision-0.9.1%2Bcpu-cp39-cp39-linux_x86_64.whl
 tqdm
 
 tensorboard

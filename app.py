@@ -21,6 +21,10 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 socketio = SocketIO(app)
 camera = Camera(Makeup_artist())
+model = torch.hub.load(
+        'ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=False
+    ).autoshape()  # force_reload = recache latest code
+model.eval()
 
 
 @socketio.on('input image', namespace='/test')
@@ -77,8 +81,4 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    model = torch.hub.load(
-        'ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=False
-    ).autoshape()  # force_reload = recache latest code
-    model.eval()
     socketio.run(app)
