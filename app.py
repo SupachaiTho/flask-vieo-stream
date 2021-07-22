@@ -1,80 +1,73 @@
-from flask import Flask, render_template, send_from_directory, Response
+from sys import stdout
+from makeup_artist import Makeup_artist
+import logging
+from flask import Flask, render_template, Response
+from flask_socketio import SocketIO, emit
 from camera import Camera
-from pathlib import Path
-from capture import capture_and_save
+from utils import base64_to_pil_image, pil_image_to_base64
 import cv2
-import argparse, logging, logging.config, conf
-
-logging.config.dictConfig(conf.dictConfig)
-logger = logging.getLogger(__name__)
-
-camera = Camera()
-camera.run()
+import numpy as np
+import base64
+import io
+from imageio import imread
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
-
-@app.after_request
-def add_header(r):
-	"""
-	Add headers to both force latest IE rendering or Chrome Frame,
-	and also to cache the rendered page for 10 minutes
-	"""
-	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-	r.headers["Pragma"] = "no-cache"
-	r.headers["Expires"] = "0"
-	r.headers["Cache-Control"] = "public, max-age=0"
-	return r
-
-@app.route("/")
-def entrypoint():
-	logger.debug("Requested /")
-	return render_template("index.html")
-
-@app.route("/r")
-def capture():
-	logger.debug("Requested capture")
-	im = camera.get_frame(_bytes=False)
-	try:
-		capture_and_save(im)
-	except:
-		print("An exception occurred")
-	return render_template("send_to_init.html")
-
-@app.route("/images/last")
-def last_image():
-	logger.debug("Requested last image")
-	p = Path("images/last.png")
-	if p.exists():
-		r = "last.png"
-	else:
-		logger.debug("No last image")
-		r = "not_found.jpeg"
-	return send_from_directory("images",r)
+app.logger.addHandler(logging.StreamHandler(stdout))
+app.config['SECRET_KEY'] = 'secret!'
+app.config['DEBUG'] = True
+socketio = SocketIO(app)
+camera = Camera(Makeup_artist())
 
 
-def gen(camera):
-	logger.debug("Starting stream")
-	while True:
-		frame = camera.get_frame()
-		yield (b'--frame\r\n'
-			   b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n')
+@socketio.on('input image', namespace='/test')
+def test_message(input):
+    input = input.split(",")[1]
+    camera.enqueue_input(input)
+    image_data = input # Do your magical Image processing here!!
+    #image_data = image_data.decode("utf-8")
 
-@app.route("/stream")
-def stream_page():
-	logger.debug("Requested stream page")
-	return render_template("stream.html")
+    img = imread(io.BytesIO(base64.b64decode(image_data)))
+    cv2_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    cv2.imwrite("reconstructed.jpg", cv2_img)
+    retval, buffer = cv2.imencode('.jpg', cv2_img)
+    b = base64.b64encode(buffer)
+    b = b.decode()
+    image_data = "data:image/jpeg;base64," + b
 
-@app.route("/video_feed")
+    print("OUTPUT " + image_data)
+    emit('out-image-event', {'image_data': image_data}, namespace='/test')
+    #camera.enqueue_input(base64_to_pil_image(input))
+
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    app.logger.info("client connected")
+
+
+@app.route('/')
+def index():
+    """Video streaming home page."""
+    return render_template('index.html')
+
+
+def gen():
+    """Video streaming generator function."""
+
+    app.logger.info("starting to generate frames!")
+    while True:
+        frame = camera.get_frame() #pil_image_to_base64(camera.get_frame())
+
+        print(type(frame))
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+
+@app.route('/video_feed')
 def video_feed():
-	return Response(gen(camera),
-		mimetype="multipart/x-mixed-replace; boundary=frame")
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-if __name__=="__main__":
-	# socketio.run(app,host="0.0.0.0",port="3005",threaded=True)
-	parser = argparse.ArgumentParser()
-	print(parser);
-	parser.add_argument('-p','--port',type=int,default=5000, help="Running port")
-	parser.add_argument("-H","--host",type=str,default='localhost', help="Address to broadcast")
-	args = parser.parse_args()
-	logger.debug("Starting server")
-	app.run(debug=True)
+
+if __name__ == '__main__':
+    socketio.run(app)
