@@ -23,7 +23,7 @@ $(document).ready(function(){
     socket.emit('output image')
     var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-    logSend.html('<p>' + rndValue + '-send '+ dataURL +'</p>');
+    logSend.text(rndValue + '-send   '+ dataURL);
 
     var img = new Image();
     socket.on('out-image-event',function(data){
@@ -31,7 +31,7 @@ $(document).ready(function(){
         rndValue = Math.floor((Math.random() * 50));
 
         img.src = dataURL//data.image_data
-        logReceive.html('<p>' + rndValue + '-receive '+ data.image_data+' </p>');
+        logReceive.text(rndValue + '-receive   '+ data.image_data);
         photo.setAttribute('src', data.image_data);
 
     });
