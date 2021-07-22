@@ -51,7 +51,7 @@ $(document).ready(function(){
 
     setInterval(function () {
       sendSnapshot();
-    }, 150);
+    }, 500);
   }).catch(function(error) {
     console.log(error);
   });
