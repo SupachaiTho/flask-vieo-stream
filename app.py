@@ -9,7 +9,6 @@ import cv2
 import numpy as np
 import base64
 import io
-from imageio import imread
 import matplotlib.pyplot as plt
 
 app = Flask(__name__)
@@ -27,7 +26,7 @@ def test_message(input):
     image_data = input # Do your magical Image processing here!!
     #image_data = image_data.decode("utf-8")
 
-    img = imread(io.BytesIO(base64.b64decode(image_data)))
+    img = cv2.imread(io.BytesIO(base64.b64decode(image_data)))
     cv2_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     cv2.imwrite("reconstructed.jpg", cv2_img)
     retval, buffer = cv2.imencode('.jpg', cv2_img)
