@@ -28,8 +28,7 @@ PyYAML
 scipy
 https://download.pytorch.org/whl/cpu/torch-1.8.1%2Bcpu-cp39-cp39-linux_x86_64.whl
 # https://download.pytorch.org/whl/cpu/torch-1.9.0%2Bcpu-cp36-cp36m-linux_x86_64.whl
-torchvision
-# https://download.pytorch.org/whl/cpu/torchvision-0.9.1%2Bcpu-cp39-cp39-linux_x86_64.whl
+https://download.pytorch.org/whl/cpu/torchvision-0.9.1%2Bcpu-cp39-cp39-linux_x86_64.whl
 tqdm
 
 tensorboard
