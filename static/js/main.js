@@ -2,7 +2,8 @@ $(document).ready(function(){
   let namespace = "/test";
   let video = document.querySelector("#videoElement");
   let canvas = document.querySelector("#canvasElement");
-  let log = document.querySelector("#log");
+  let logSend = document.querySelector("#log-send");
+  let logReceive = document.querySelector("#log-receive");
   let ctx = canvas.getContext('2d');
   photo = document.getElementById('photo');
   var localMediaStream = null;
@@ -20,6 +21,9 @@ $(document).ready(function(){
     socket.emit('input image', dataURL);
 
     socket.emit('output image')
+    var rndValue;
+    rndValue = Math.floor((Math.random() * 50));
+    logSend.html('<p>' + rndValue + '-send '+ dataURL +'</p>';
 
     var img = new Image();
     socket.on('out-image-event',function(data){
@@ -27,7 +31,7 @@ $(document).ready(function(){
         rndValue = Math.floor((Math.random() * 50));
 
         img.src = dataURL//data.image_data
-        log.html('<p>' + rndValue + '-v2 </p>'+'<p>' + data.image_data + '</p>');
+        logReceive.html('<p>' + rndValue + '-receive '+ data.image_data+' </p>');
         photo.setAttribute('src', data.image_data);
 
     });
