@@ -12,7 +12,6 @@ $(document).ready(function(){
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-      $('#logSend').text('Sending  '+rndValue);
     if (!localMediaStream) {
       return;
     }
@@ -20,6 +19,7 @@ $(document).ready(function(){
     ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, 300, 150);
 
     let dataURL = canvas.toDataURL('image/jpeg');
+     $('#logSend').text('Sending  '+rndValue+', '+dataURL.substr(dataURL.length - 10));
     socket.emit('input image', dataURL);
 
     socket.emit('output image')
@@ -28,9 +28,8 @@ $(document).ready(function(){
     socket.on('out-image-event',function(data){
         var rndValue2;
         rndValue2 = Math.floor((Math.random() * 50));
-        $('#logReceive').text('Receiving2 '+rndValue2);
-        img.src = dataURL//data.image_data
-//        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
+        $('#logReceive').text('Receiving2 '+rndValue2+','+data.image_data.substr(data.image_data.length - 10));
+        img.src = dataURL
         photo.src = data.image_data;
     });
   }
