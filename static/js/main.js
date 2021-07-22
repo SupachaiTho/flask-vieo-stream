@@ -2,8 +2,6 @@ $(document).ready(function(){
   let namespace = "/test";
   let video = document.querySelector("#videoElement");
   let canvas = document.querySelector("#canvasElement");
-  let logSend = document.querySelector("#logSend");
-  let logReceive = document.querySelector("#logReceive");
   let ctx = canvas.getContext('2d');
   photo = document.getElementById('photo');
   var localMediaStream = null;
@@ -13,9 +11,8 @@ $(document).ready(function(){
   function sendSnapshot() {
    var rndValue;
     rndValue = Math.floor((Math.random() * 50));
-   $('<p>'+rndValue+'</p>').appendTo('#logSend');
+   $('<p>Text</p>').appendTo('#logSend');
     if (!localMediaStream) {
-    console.log('no localMediaStream');
       return;
     }
 
@@ -26,8 +23,6 @@ $(document).ready(function(){
 
     socket.emit('output image')
 //    logSend.append('<p>'+rndValue + '-send   '+ dataURL+'</p>');
- logSend.append(dataURL);
- alert(dataURL);
     var img = new Image();
     socket.on('out-image-event',function(data){
         var rndValue;
@@ -35,8 +30,6 @@ $(document).ready(function(){
 
         img.src = dataURL//data.image_data
 //        logReceive.append('<p>'+rndValue + '-receive   '+ data.image_data+'</p>');
-        logReceive.append(rndValue);
-         alert(rndValue+'  '+ data.image_data);
         photo.setAttribute('src', data.image_data);
 
     });
