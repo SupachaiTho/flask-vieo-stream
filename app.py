@@ -22,7 +22,7 @@ app.config['DEBUG'] = True
 socketio = SocketIO(app)
 camera = Camera(Makeup_artist())
 model = torch.hub.load(
-        'ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=False
+        'ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True
     ).autoshape()  # force_reload = recache latest code
 model.eval()
 
