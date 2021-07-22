@@ -59,6 +59,7 @@ $(document).ready(function(){
     localMediaStream = stream;
 
     setInterval(function () {
+    alert('send');
       sendSnapshot();
     }, 50);
   }).catch(function(error) {
