@@ -16,6 +16,7 @@ olefile==0.44
 opencv-python-headless
 matplotlib
 Pillow
+imageio
 python-engineio==1.7.0
 python-socketio==1.7.7
 redis==2.10.5
