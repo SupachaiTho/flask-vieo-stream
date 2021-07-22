@@ -9,6 +9,9 @@ $(document).ready(function(){
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 
   function sendSnapshot() {
+  var rndValue;
+  rndValue = Math.floor((Math.random() * 50));
+  $('<p>' + rndValue + '</p>').appendTo('#log');
     if (!localMediaStream) {
       return;
     }
