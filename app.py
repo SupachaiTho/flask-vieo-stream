@@ -77,7 +77,7 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True).autoshape()
+    model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s').autoshape()
     model.eval()
     socketio.run(app)
 
