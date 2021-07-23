@@ -83,5 +83,5 @@ if __name__ == '__main__':
 
 if __name__ == 'app':
     print('build model at Heroku')
-    model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s').autoshape()
+    model = model = torch.hub.load('ultralytics/yolov5', 'custom', path='static/yolov5s.pt', force_reload=True).autoshape()
     model.eval()
