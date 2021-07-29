@@ -1,0 +1,11 @@
+[Unit]
+Description=My Script Service
+After=multi-user.target
+
+[Service]
+Type=idle
+WorkingDirectory=/root/flask-vieo-stream
+ExecStart=/root/flask-vieo-stream/flask-video-stream/bin/python app.py
+
+[Install]
+WantedBy=multi-user.target
