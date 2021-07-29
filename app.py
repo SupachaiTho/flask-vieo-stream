@@ -79,7 +79,7 @@ def video_feed():
 if __name__ == '__main__':
     model = model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).autoshape()
     model.eval()
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=5000)
 
 if __name__ == 'app':
     print('build model at Heroku')
